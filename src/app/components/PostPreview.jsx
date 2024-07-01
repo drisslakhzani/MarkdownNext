@@ -3,7 +3,7 @@ import Link from "next/link";
 
 const PostPreview = (props) => {
     return (
-        <section className="p-6 m-4 bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 w-full md:w-[60%] lg:w-[40%]">
+        <section className="p-6 m-4 bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 w-full md:w-[60%] lg:w-[45%]">
             <Link  href={`/posts/${props.post.post}`}>
                 <div>
                     <h1  className="text-2xl font-bold text-blue-600 ">{props.post.title}</h1>

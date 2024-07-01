@@ -9,7 +9,7 @@ export default function Home() {
         <PostPreview key={index} post={post} />
     ));
     return (
-        <main className="flex flex-wrap justify-center  w-full md:w-[55%] lg:w-[52%]">
+        <main className="flex flex-wrap justify-center  w-full md:w-[55%] lg:w-[60%]">
             {PostTitles}
         </main>
     );
