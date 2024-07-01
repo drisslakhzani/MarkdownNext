@@ -1,36 +1,43 @@
 import React from 'react';
 import fs from 'fs';
 import path from 'path';
-import Markdown from "markdown-to-jsx";
-import matter from "gray-matter";
-import getPostData from "@/app/components/getPostData";
+import matter from 'gray-matter';
+import Markdown from 'markdown-to-jsx';
+import getPostData from '@/app/components/getPostData';
 
 // Function to get post data by slug
 const getPostsdata = (slug) => {
-    const directory = 'src/posts/';
-    const file = `${directory}${slug}.md`;
+    const directory = path.join(process.cwd(), 'src', 'posts');
+    const file = `${directory}/${slug}.md`;
     const content = fs.readFileSync(file, 'utf8');
-    const contentResult = matter(content);
-    return contentResult;
+    const { data, content: markdownContent } = matter(content);
+    return { data, content: markdownContent };
 };
 
 // Function to generate static params for dynamic routing
-export const generateStaticParams = () => {
+export const generateStaticParams = async () => {
     const postsData = getPostData();
     return postsData.map((post) => ({
-        slug: post.slug
+        slug: post.slug,
     }));
 };
 
-const Page = (props) => {
-    const slug = props.params.slug; // Retrieve the slug name dynamically (being passed in the URL)
-    const posts = getPostsdata(slug); // Use the slug to get post data
+const PostPage = ({ params }) => {
+    const { slug } = params;
+    const { data, content } = getPostsdata(slug);
+
     return (
         <div className="p-6 max-w-3xl mx-auto">
-            <h1 className="text-3xl font-bold mb-4">{posts.data.title}</h1>
-            <Markdown className="prose">{posts.content}</Markdown>
+            <h1 className="text-3xl font-bold mb-4">{data.title}</h1>
+            <Markdown className="prose">{content}</Markdown>
         </div>
     );
 };
 
-export default Page;
+export async function generateMetadata({ params }) {
+    const { slug } = params;
+    const { data } = getPostsdata(slug);
+    return { title: data.title };
+}
+
+export default PostPage;
